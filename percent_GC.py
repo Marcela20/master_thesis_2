@@ -7,7 +7,7 @@ from ramps_cai import get_fixed_size_windows_from_seq
 import os
 
 
-def count_GC_in_each_position(list_of_dicts):
+def count_GC_in_each_position(list_of_dicts, ):
     initial_dataframe = pd.DataFrame([(0, 0, 0, 0)], columns=['total', 'first_pos', 'second_pos', 'third_pos'])
     for dict_for_gene in list_of_dicts:
         df = pd.DataFrame([GC123(dict_for_gene["seq"])], columns=['total', 'first_pos', 'second_pos', 'third_pos'])
@@ -16,7 +16,7 @@ def count_GC_in_each_position(list_of_dicts):
     return initial_dataframe
 
 
-def count_GC_in_ramps(list_of_dicts):
+def count_GC_in_ramps(list_of_dicts, len_of_ramps, step, num_of_ramps):
     list_of_GC_values = []
     df = None
     for gene in list_of_dicts:
@@ -37,7 +37,7 @@ def count_GC_in_ramps(list_of_dicts):
     return df
 
 
-def count_gc_for_many_files(path_to_folder, path_dest_folder, name_of_file, path_for_overall=None, path_for_ramps=None):
+def count_gc_for_many_files(path_to_folder, path_dest_folder, name_of_file,  len_of_gene, num_of_ramps, len_of_ramps, step, path_for_overall=None, path_for_ramps=None):
     directory = os.fsencode(path_to_folder)
     dummy_data = {'total': 0, 'first_pos': 0, 'second_pos': 0, 'third_pos': 0}
     df_overall_GC = pd.DataFrame(dummy_data, index=[0])
@@ -52,9 +52,9 @@ def count_gc_for_many_files(path_to_folder, path_dest_folder, name_of_file, path
         list_of_dicts_of_cds = create_list_of_records(organism, len_of_gene)
         df_overall_GC = df_overall_GC.add(count_GC_in_each_position(list_of_dicts_of_cds), fill_value=0)
         if counter == 0:
-            data_to_plot = count_GC_in_ramps(list_of_dicts_of_cds).div(100000000)
+            data_to_plot = count_GC_in_ramps(list_of_dicts_of_cds, len_of_ramps, step, num_of_ramps).div(100000000)
         else:
-            subdata_to_plot = count_GC_in_ramps(list_of_dicts_of_cds).div(100000000)
+            subdata_to_plot = count_GC_in_ramps(list_of_dicts_of_cds, len_of_ramps, step, num_of_ramps).div(100000000)
             data_to_plot = data_to_plot.add(subdata_to_plot)
 
         counter += 1
@@ -62,7 +62,6 @@ def count_gc_for_many_files(path_to_folder, path_dest_folder, name_of_file, path
     data_to_plot = data_to_plot.div(counter)
     data_to_plot = data_to_plot.multiply(100000000)
 
-    print(df_overall_GC)
     df_overall_GC.to_csv(path_for_overall)
     data_to_plot.to_csv(path_for_ramps)
     plot = data_to_plot.plot()
@@ -85,5 +84,5 @@ if __name__ == "__main__":
     num_of_ramps = 200
     len_of_gene = 3 + len_of_ramps + (step * (num_of_ramps - 1)) + 1
 
-    count_gc_for_many_files(r'K:\GC_low', r"C:\\Users\\marce\\Desktop\\GC_percent\\", "low",
+    count_gc_for_many_files(br"C:\\Users\\marce\Desktop\\master_thesis_project\\master_thesis_2_0\\GC_organisms\\GC_high", r"C:\\Users\\marce\\Desktop\\GC_percent\\", "low",  len_of_gene, num_of_ramps, len_of_ramps, step,
                             r'to_appendix/GC_low_overall', r'to_appendix/GC_low_ramps')

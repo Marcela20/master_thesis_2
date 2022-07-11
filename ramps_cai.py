@@ -38,7 +38,6 @@ def create_dict_of_dicts():
     return synonymousCodons
 
 
-
 def get_RSCU(list_of_sequences):
     """
     returns dict like {codon:value...}
@@ -75,13 +74,12 @@ def get_RSCUij(dictionary_of_RSCU_vals, dictionary_of_RSCU_vals_reference_set):
     return codons_for_genom
 
 
-
-def get_RSCUij_for_ref_set(dictionary_of_RSCU_vals):
+def get_RSCUij_for_ref_set(dictionary_of_RSCU_vals, dict_of_codons):
     """
     returns nested dictionary {aminoacid:{codon:wij value, codon:wij value}....}
     each codon has value of it's RSCu devided by RSCu of most common one
     """
-    codons = DICT_OF_CODONS.copy()
+    codons = dict_of_codons.copy()
     dictionary_of_RSCU_values = dict(dictionary_of_RSCU_vals)
     for key, value in codons.items():
         for key_2, val_2 in dictionary_of_RSCU_values.items():
@@ -89,7 +87,6 @@ def get_RSCUij_for_ref_set(dictionary_of_RSCU_vals):
                 value[key_2] = dictionary_of_RSCU_values[key_2]
 
     return codons
-
 
 
 def get_fixed_size_windows_from_seq(sequence, len_of_wind, step_size, num_of_occurrences):
@@ -182,7 +179,7 @@ def create_plot_of_sum_of_genes(sequences, path, name, number_of_ramps, codons, 
     plt.close()
 
 @performance
-def create_sum_of_files(num_of_files, directory, path_to_export=None):
+def create_sum_of_files_cai(num_of_files, directory, dict_of_codons, path_to_export=None):
     path_of_folder = r"C:\\Users\\marce\\Desktop\\ramps_of_all_sum_2\\"
     len_of_ramps = 3
     step = 3
@@ -193,6 +190,7 @@ def create_sum_of_files(num_of_files, directory, path_to_export=None):
     ultimate_data_frame = pd.DataFrame(dummy_data)
     dummy_data_for_sum = {0: [0] * num_of_files}
     ultimate_data_frame_sum = pd.DataFrame(dummy_data_for_sum)
+
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
         organism = f"{directory.decode('ascii')}\{filename}"
@@ -204,7 +202,7 @@ def create_sum_of_files(num_of_files, directory, path_to_export=None):
                 sequences_of_an_organism_long.append(dict_seq)
 
         seqs_ref_set = sequences_of_an_organism[1]
-        RSCU_of_ref_set = get_RSCUij_for_ref_set(get_RSCU(seqs_ref_set))
+        RSCU_of_ref_set = get_RSCUij_for_ref_set(get_RSCU(seqs_ref_set), dict_of_codons)
         codons_RSCU = get_RSCUij(get_RSCU(sequences_of_an_organism_long), RSCU_of_ref_set)
 
         for seq in sequences_of_an_organism_long:
@@ -223,4 +221,4 @@ def create_sum_of_files(num_of_files, directory, path_to_export=None):
 
 if __name__ == "__main__":
     DICT_OF_CODONS = create_dict_of_dicts()
-    create_sum_of_files(101, r'K:\GC_low', r'to_appendix/GC_low')
+    create_sum_of_files_cai(101, r'K:\GC_low', r'to_appendix/GC_low', DICT_OF_CODONS)

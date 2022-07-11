@@ -59,18 +59,6 @@ def get_RSCU(list_of_dicts):
     return list_of_RSCU_dicts
 
 
-def save_heatmaps_to_folder(list_of_files, path):
-    for file in list_of_files:
-        df = pd.DataFrame(get_RSCU(create_list_of_records(f'sequences_of_model_organisms/{file}', 183)))
-        fig, ax = plt.subplots(figsize=(20, 5))
-        sns.heatmap(df, yticklabels=False, vmin=0, vmax=6, cmap="gist_heat")
-        file_name_l = file.split(".")
-        file_name = file_name_l[0] + "." + file_name_l[1]
-        plt.ylabel(file_name)
-        fig.savefig(path + f"{file_name}.png")
-        plt.close(fig)
-
-
 def generate_tuple_for_height_ratios(num_of_groups):
     start_list = []
     for i in range(len(num_of_groups)):
@@ -98,31 +86,31 @@ def get_mean_RSCU_of_many_files(directory):
     return df
 
 
-if __name__ == "__main__":
-    directiories = ['GC_high', 'GC_medium', 'GC_low']
+def create_RSCU_heatmap(directiories, path_to_directories):
+
     data_frames_to_plot = []
     tup_of_height_ratios = generate_tuple_for_height_ratios(directiories)
     num_of_subplots = len(directiories) + 1
     for directory in directiories:
-        data_frames_to_plot.append(get_mean_RSCU_of_many_files(f'K:\{directory}'))
+        data_frames_to_plot.append(get_mean_RSCU_of_many_files(f'{path_to_directories}{directory}'))
 
     grid_kws = {"height_ratios": tup_of_height_ratios, "hspace": .3}
 
     fig, (ax1, ax2, ax7, ccbar) = plt.subplots(num_of_subplots, figsize=(13, 8), gridspec_kw=grid_kws,
-                                               constrained_layout=True)  # add here before ax7, ax(1, 2, 3..) dependinding on number of organisms, if You have one, ax7 is sufficient
+                                            constrained_layout=True)  # add here before ax7, ax(1, 2, 3..) dependinding on number of organisms, if You have one, ax7 is sufficient
     l_of_axes = [ax1,
-                 ax2,
-                 ax7]  # add here before ax7, ax(1, 2, 3..) dependinding on number of organisms, if You have one, ax7 is sufficient
+                ax2,
+                ax7]  # add here before ax7, ax(1, 2, 3..) dependinding on number of organisms, if You have one, ax7 is sufficient
     counter = 0
     for df, axe in zip(data_frames_to_plot, l_of_axes):
         counter += 1
         if axe == ax7:
             heat = sns.heatmap(df, yticklabels=False, xticklabels=True, vmin=0, vmax=6, cmap="gist_heat", ax=axe,
-                               cbar_ax=ccbar,
-                               cbar_kws={"orientation": "horizontal"}, linewidths=0)
+                            cbar_ax=ccbar,
+                            cbar_kws={"orientation": "horizontal"}, linewidths=0)
         else:
             heat = sns.heatmap(df, yticklabels=False, xticklabels=False, cmap="gist_heat", ax=axe,
-                               cbar_ax=ccbar, cbar_kws={"orientation": "horizontal"}, linewidths=0)
+                            cbar_ax=ccbar, cbar_kws={"orientation": "horizontal"}, linewidths=0)
         file_name = 'GC content'
         if counter == 0:
             heat.set_ylabel(f'high {file_name}')
@@ -133,4 +121,6 @@ if __name__ == "__main__":
 
     plt.show()
 
-    # save_heatmaps_to_folder(list_of_files, f' ')
+if __name__ == '__main__':
+    directiories = ['GC_high', 'GC_medium', 'GC_low']
+    create_RSCU_heatmap(directiories, "GC_organisms/")
