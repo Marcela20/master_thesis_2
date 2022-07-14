@@ -1,3 +1,5 @@
+"""generates reference set of genes"""
+
 from Bio import SeqIO
 import re
 from utils import create_list_of_records

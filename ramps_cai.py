@@ -1,3 +1,9 @@
+"""
+    generates plots with ramps based on CAI
+    call  create_sum_of_files_cai function and pass number
+    of files You want to analyse and path to directory where the files are located
+"""
+
 from CAI import RSCU
 import pandas as pd
 import matplotlib.pyplot as plt

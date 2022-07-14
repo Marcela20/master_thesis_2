@@ -1,3 +1,17 @@
+
+"""
+    generates plots with ramps based on tAI
+    Function create_plot_of_sum_of_genes() takes list of SeqIO object,
+    that can be gerated by function create_list_of_records(),
+    where organism is a file with sequences and len_of_gene is minimal lenght of genes
+    that you want to study.
+    Another paramether are:
+    path, where you pass path of a directory where You want to save generated plot,
+    name, which is a name for generated file
+    number_of_ramps, where you define hom many ramps the scripts is to generate
+    codons, where You are to pass dictionary of codons with their relative_adaptiveness values.
+    This dictionary can be generatet by passing file with these values to create_list_of_records()
+"""
 import pandas as pd
 import matplotlib.pyplot as plt
 from ramps_cai import get_fixed_size_windows_from_seq
@@ -87,7 +101,10 @@ def create_plot_of_sum_of_genes(sequences, path, name, number_of_ramps, codons):
         ultimate_data_frame = ultimate_data_frame.add(df, fill_value=0)
 
     ultimate_data_frame = ultimate_data_frame.div(len(sequences))
-    file = name.replace(".txt", "")
+    if name[-4:] == '.txt':
+        file = name.replace(".txt", "")
+    else:
+        file = name
     plt.plot(ultimate_data_frame)
     plt.ylabel("wij value")
     plt.xlabel("ramp")
@@ -105,7 +122,6 @@ if __name__ == '__main__':
     len_of_gene = 3 + len_of_ramps + (step * (num_of_ramps - 1)) + 1
     codons_wij_vals = get_absolute_adaptiveness_values(
         'old_tAIs/idk.txt')  # this file must be adjusted to right organism
-    print(len(codons_wij_vals))
 
 
 

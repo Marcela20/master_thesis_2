@@ -1,3 +1,11 @@
+"""
+Script to generate heatmap with RSCU values.
+Call  create_RSCU_heatmap(directiories, path_to_directories) to generate heatmap.
+directores - list of names of direcories with files with sequences (pass single directory as one element list)
+each directory will be sparete subplot.
+path_to_directories = path to direcory containing these direcories
+"""
+
 import seaborn as sns
 from CAI import RSCU
 import pandas as pd

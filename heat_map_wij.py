@@ -1,3 +1,8 @@
+"""
+Script to generate heatmap with RSCU values.
+
+"""
+
 import seaborn as sns
 from CAI import RSCU
 import pandas as pd

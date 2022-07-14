@@ -1,3 +1,18 @@
+"""
+Script to generate ramps with GC precent values.
+Call count_gc_for_many_files(path_to_folder, path_dest_folder, name_of_file,  len_of_gene, num_of_ramps, len_of_ramps, step, path_for_overall=None, path_for_ramps=None)
+function to generate raps.
+path_to_folder is path to folder where files with sequences are located
+path_dest_folder is path to folder where you want to save output plot
+name_of_file is a name for output file
+num of ramps is an integer that says hom many ramps the scripts is to generate
+len_of_ramps- how long are the ramps
+step- number of nucleotydes that separetes ramps (ex. if lenght of ramp is 3, and step is 3,
+ramps are not separated, if lenght of ramp is 3, and step is 4, ramps are separated by 1 nucleotyde)
+step must by iteration of 3.
+
+"""
+
 from Bio.SeqUtils import GC123
 import pandas as pd
 import matplotlib.pyplot as plt

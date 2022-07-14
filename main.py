@@ -1,3 +1,5 @@
+"""generating ramps with GC percent, RSCU heatmap and ramps with CAI values"""
+
 from RSCU_for_many_files import *
 from ramps_cai import *
 from ramps_tAI import *
