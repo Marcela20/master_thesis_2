@@ -1,4 +1,4 @@
-### Scripts for my master thesisi project regarding Codon Usage Bias (CUB).
+### Scripts for my master thesis project regarding Codon Usage Bias (CUB).
 
 
 ## RSCU_for_many_files.py
